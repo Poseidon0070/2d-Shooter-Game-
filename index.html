@@ -6,10 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BoomBam</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="shortcut icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnvdSkj6y-AF6HHJWR9nmnlYKSgHUGgPo4bw&usqp=CAU" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js" integrity="sha512-WoO4Ih0CDOSLYafy22wZD/mcJ7k0ESLqtQsFa6zFKnEUrbtuGU+GkLtVhgt93xa2qewG5gKEC6CWlN8OaCTSVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+    <div class = "fixed text-white text-sm ml-2 mt-1" >
+        <span>Score : </span><span id="score">0</span>
+    </div>
+    <div class="fixed inset-0" id="UI">
+        <div class="bg-white max-w-md w-full p-6 text-center">
+            <h1 class="text-4xl font-bold leadind-none" id="UIscore">0</h1>
+            <p class="text-sm text-gray-700 mb-2">Points</p>
+            <div>
+                <button class="bg-blue-500 text-white w-full py-3 rounded-full" id="StartGameBTN">Start Game</button>
+            </div>
+        </div>
+    </div>
     <canvas id="canvas"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js" integrity="sha512-f8mwTB+Bs8a5c46DEm7HQLcJuHMBaH/UFlcgyetMqqkvTcYg4g5VXsYR71b3qC82lZytjNYvBj2pf0VekA9/FQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="index.js"></script>

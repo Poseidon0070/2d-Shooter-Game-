@@ -1,12 +1,23 @@
 let canvas = document.getElementById("canvas");
 const gui = new dat.GUI();
-// const gsap = new gsap();
+const Score = document.querySelector("#score");
+const StartGameBTN = document.querySelector("#StartGameBTN");
+const UI = document.querySelector("#UI");
 canvas.style.backgroundColor = "rgba(0,0,0,1)";
 
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
 var c = canvas.getContext("2d");
+
+const properties = {
+    EnemyVelocity : 0.5,
+    BulletVelocity : 4
+}
+const modes = gui.addFolder("Modes");
+modes.add(properties,"EnemyVelocity",0.2,2)
+modes.add(properties,"BulletVelocity",2,8)
+
 
 // --------------------- UTILITY FUNCTIONS --------------------------------------------------
 
@@ -117,8 +128,8 @@ function Enemy(x,y,radii,dx,dy){
     this.color = `hsl(${Math.random()*360},50%,50%)`;
     var angle = Math.atan2((innerHeight/2-this.y),(innerWidth/2-this.x));
     this.velocity = {
-        x : Math.cos(angle),
-        y : Math.sin(angle)
+        x : Math.cos(angle)*properties.EnemyVelocity,
+        y : Math.sin(angle)*properties.EnemyVelocity
     }
     this.draw = function(){
         c.beginPath();
@@ -150,11 +161,12 @@ function spawnEnemies(){
 }
 //--------------------------------------------------------------------------------------
 
+let score = 0;
 var Bullets = [];
 $(window).on("click",(event)=>{
     var angle = Math.atan2((event.clientY-innerHeight/2),(event.clientX-innerWidth/2));
-    var xVel = 2*Math.cos(angle);
-    var yVel = 2*Math.sin(angle);
+    var xVel = properties.BulletVelocity*Math.cos(angle);
+    var yVel = properties.BulletVelocity*Math.sin(angle);
     Bullets.push(new Bullet(innerWidth/2,innerHeight/2,5,xVel,yVel));
 })
 let animationId;
@@ -171,13 +183,16 @@ function animate(){
     })
     Enemies.forEach((Enemy,EnemyIndex)=>{
         Enemy.update();
-        // if(getDistance(shooter.x,shooter.y,Enemy.x,Enemy.y)-shooter.radius-Enemy.radius <= 0){
-        //     // cancelAnimationFrame(animationId);
-        // }
+        if(getDistance(shooter.x,shooter.y,Enemy.x,Enemy.y)-shooter.radius-Enemy.radius <= 0){
+            cancelAnimationFrame(animationId);
+            $("#UIscore").html(score);
+            UI.style.display = "flex";
+        }
         Bullets.forEach((Bullet,BulletIndex)=>{
             if((getDistance(Enemy.x,Enemy.y,Bullet.x,Bullet.y)-Bullet.radius-Enemy.radius) < 0){
 
-                if(Enemy.radius > 15){
+                if(Enemy.radius > 20){
+                    score += 10;
                     gsap.to(Enemy,{
                         radius : Enemy.radius-10
                     })
@@ -185,14 +200,17 @@ function animate(){
                         Bullets.splice(BulletIndex,1);
                     }, 0);
                 }else{
+                    score += 25;
                     setTimeout(()=>{
                         Bullets.splice(BulletIndex,1);
                         Enemies.splice(EnemyIndex,1);
                     },0)
                 }
 
+                Score.innerHTML = score;
+
                 for(let i=0;i<Enemy.radius;i++){
-                    particles.push(new Particle(Enemy.x,Enemy.y,Math.random()*3,Enemy.color,(Math.random()-0.5)*4,(Math.random()-0.5)*4));
+                    particles.push(new Particle(Enemy.x,Enemy.y,Math.random()*3,Enemy.color,(Math.random()-0.5)*8,(Math.random()-0.5)*8));
                 }
             }
         })
@@ -206,5 +224,17 @@ function animate(){
         }
     })
 }
-animate();
-spawnEnemies();
+
+function reInitialize(){
+    Score.innerHTML = 0;
+    score = 0;
+    particles = [];
+    Enemies = [];
+    Bullets = [];
+}
+StartGameBTN.addEventListener("click",()=>{
+    reInitialize();
+    animate();
+    spawnEnemies();
+    UI.style.display = "none";
+})

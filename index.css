@@ -1,7 +1,13 @@
 body{
     margin: 0px;
     overflow: hidden; /* Hide scrollbars */
+    user-select: none;
 }
 canvas{
     border: 1px solid black;
+}
+#UI{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
