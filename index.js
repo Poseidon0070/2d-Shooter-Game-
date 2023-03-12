@@ -8,6 +8,8 @@ canvas.style.backgroundColor = "rgba(0,0,0,1)";
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
+
+
 var c = canvas.getContext("2d");
 
 const properties = {
@@ -164,10 +166,17 @@ function spawnEnemies(){
 let score = 0;
 var Bullets = [];
 $(window).on("click",(event)=>{
-    var angle = Math.atan2((event.clientY-innerHeight/2),(event.clientX-innerWidth/2));
-    var xVel = properties.BulletVelocity*Math.cos(angle);
-    var yVel = properties.BulletVelocity*Math.sin(angle);
-    Bullets.push(new Bullet(innerWidth/2,innerHeight/2,5,xVel,yVel));
+    if(UI.style.display == "none"){
+        var angle = Math.atan2((event.clientY-innerHeight/2),(event.clientX-innerWidth/2));
+        var xVel = properties.BulletVelocity*Math.cos(angle);
+        var yVel = properties.BulletVelocity*Math.sin(angle);
+        Bullets.push(new Bullet(innerWidth/2,innerHeight/2,5,xVel,yVel));
+        async function play(){
+            const Bullet = await new Audio('./Bullet.mp3');
+            Bullet.play();   
+        }
+        play();
+    }
 })
 let animationId;
 function animate(){
@@ -201,6 +210,9 @@ function animate(){
                     }, 0);
                 }else{
                     score += 25;
+                    const Explosion = new Audio('./Explosion.mp3');
+                    Explosion.play();
+
                     setTimeout(()=>{
                         Bullets.splice(BulletIndex,1);
                         Enemies.splice(EnemyIndex,1);
