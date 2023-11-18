@@ -8,17 +8,20 @@ canvas.style.backgroundColor = "rgba(0,0,0,1)";
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
-
+let bgMusic = new Audio('./bg.mp3');
+bgMusic.play();
 
 var c = canvas.getContext("2d");
 
 const properties = {
     EnemyVelocity : 0.5,
-    BulletVelocity : 4
+    BulletVelocity : 4,
+    EnemyDelay : 1
 }
 const modes = gui.addFolder("Modes");
 modes.add(properties,"EnemyVelocity",0.2,2)
 modes.add(properties,"BulletVelocity",2,8)
+modes.add(properties,"EnemyDelay",0,3)
 
 
 // --------------------- UTILITY FUNCTIONS --------------------------------------------------
@@ -159,7 +162,7 @@ function spawnEnemies(){
             EnemyY = Math.random() < 0.5 ? 0 - radii : innerHeight + radii;
         }
         Enemies.push(new Enemy(EnemyX,EnemyY,radii,1,1));
-    },1000)
+    },properties.EnemyDelay*1000)
 }
 //--------------------------------------------------------------------------------------
 
