@@ -9,7 +9,7 @@ canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
 let bgMusic = new Audio('./bg.mp3');
-bgMusic.play();
+
 
 var c = canvas.getContext("2d");
 
@@ -252,4 +252,7 @@ StartGameBTN.addEventListener("click",()=>{
     animate();
     spawnEnemies();
     UI.style.display = "none";
+    bgMusic.muted = false;
+    bgMusic.loop = true;
+    bgMusic.play();
 })
